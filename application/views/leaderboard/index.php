@@ -7,7 +7,8 @@
 	<!-- /meta tag -->
 
 	<!-- stylesheet -->
-	<link rel="stylesheet" href="css/style.css">
+	<script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" href="assets/css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700" rel="stylesheet">
 	<link rel="shortcut icon" href="assets/favicon/favicon.png">
@@ -59,38 +60,27 @@
 	        			<div class="cabang">CABANG</div>
 	    			</div>
 
+					<?php
+						foreach ($datas as $v):
+							$username = $v['username'];
+					?>
+					<?php
+					
+						for($i = 1; $i > 10; $i++){
+							echo $i;
+						}	
+					?>
+
 					<div class="row">
-	        			<div class="no">1</div>
-	        			<div class="name">Name1</div>
-	        			<div class="cabang">Cabang</div>
+						<div class="no"><?php $i; ?></div>
+	        			<div class="name"><?php echo $username; ?></div>
+	        			<div class="cabang" id="rifky"></div>
 	    			</div>
-
-				    <div class="row">
-				        <div class="no">2</div>
-				        <div class="name">Name2</div>
-				        <div class="cabang">Cabang</div>
-				    </div>
-				    
-				    <div class="row">
-				        <div class="no">3</div>
-				        <div class="name">Name3</div>
-				        <div class="cabang">Cabang</div>
-				    </div>
-				    
-				    <div class="row">
-				        <div class="no">4</div>
-				        <div class="name">Name4</div>
-				        <div class="cabang">Cabang</div>
-				    </div>
-				    
-				    <div class="row">
-				        <div class="no">5</div>
-				        <div class="name">Name5</div>
-				        <div class="cabang">Cabang</div>
-				    </div>
-
+					<?php endforeach; ?>
 				</div>
 			</div><!-- /main-page -->
+
+			
 
 			<footer>
 				<img src="assets/logo/color.png" alt="logo1">
@@ -99,3 +89,49 @@
 		</div>
 	</body>
 </html>
+
+<script>
+
+$(function(){
+  <?php 
+
+	$db[]['wakatime'] = 'https://wakatime.com/share/@RedAuthorium/2b6ca259-b902-4590-9685-442abaeed305.json';
+	$db[]['wakatime'] = 'https://wakatime.com/share/@sikode/5b46a374-f03f-4931-9285-f9add04ee376.json';
+
+	foreach($db as $k=>$v){
+	  echo "getWakatime('$v[wakatime]');\n";
+	}  
+  ?>
+});
+
+function secondsToHms(d) {
+	d = Number(d);
+	var h = Math.floor(d / 3600);
+	var m = Math.floor(d % 3600 / 60);
+	var s = Math.floor(d % 3600 % 60);
+
+	var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+	var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+	var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+	return hDisplay + mDisplay + sDisplay; 
+}
+
+function getWakatime(url) {
+	$.ajax({
+		type: 'GET',
+		url: url,
+		dataType: 'jsonp',
+		success: function(response) {
+		var detik = 0;
+		var rata2detik;
+		var totaldata = response.data.length;
+			for( key in response.data ){
+			detik = detik+response.data[key].grand_total.total_seconds;
+			}
+			rata2detik = detik/totaldata;
+			var jam = secondsToHms(rata2detik);
+			$('#rifky').html(jam);
+	},
+  });
+}
+</script>

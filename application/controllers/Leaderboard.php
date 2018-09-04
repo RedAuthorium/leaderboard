@@ -12,21 +12,8 @@ class Leaderboard extends CI_Controller {
 	public function index()
 	{	
         $this->load->model('user');
-        $data1 = $this->user->getUser();
-        $data = array('data1' => $data1);
-        $this->load->view('leaderboard', $data);
-
-        
-
-        $this->load->model('user');
         $data = $this->user->getUser();
-
-        // print_r($data);
-        // die();
-        // $data1 = $this->user->getUser();
-        // $data = array('data1' => $data1);
-        // $view['data']=$data;
-        $this->load->view('leaderboard.blade.php', ['datas' => $data]);
+        $this->load->view('leaderboard/index', ['datas' => $data]); 
     }
     
 }
