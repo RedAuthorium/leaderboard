@@ -13,7 +13,6 @@ class Leaderboard extends CI_Controller {
 	{	
         $this->load->model('user');
         $data = $this->user->getUser();
-        $this->load->view('leaderboard/index', ['datas' => $data]); 
+        $this->load->view('leaderboard/test', ['datas' => $data]); 
     }
-    
 }

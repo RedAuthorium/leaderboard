@@ -80,8 +80,6 @@
 				</div>
 			</div><!-- /main-page -->
 
-			
-
 			<footer>
 				<img src="assets/logo/color.png" alt="logo1">
 				<span>This Website maked with <i class="fa fa-heart"></i> in QODR HQ</span>
