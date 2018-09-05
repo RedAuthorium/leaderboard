@@ -1,4 +1,3 @@
-
 <html lang="en">
 <head>
 	<title>Table V01</title>
@@ -37,20 +36,12 @@
 								<th class="column3">Time</th>
 							</tr>
 						</thead>
-						<tbody>
-                            <?php
-                                $i = 0;
-                                $i++;
-
-                                foreach ($datas as $key => $v):
-                                    $username = $v['username'];
-                            ?>
-								<tr>
-									<td class="column1"><?php echo $key+1 ?></td>
-									<td class="column2"><?php echo $username ?></td>
-									<td class="column3"><p id="<?php echo $username ?>"></p></td>
-                                </tr>
-                            <?php endforeach; ?>
+						<tbody id="list_data">
+                            <tr>
+								<td></td>
+								<td></td>
+								<td></td>								
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -68,16 +59,24 @@
 <!--===============================================================================================-->
     <script src="assets/js/main.js"></script>
     
-    <script>
+<script>
+var wakatime = [];
+var detik = [];
 
 $(function(){
-    <?php 
+    <?php
         foreach ($datas as $v){
             if ($v['url_wakatime']!=''){
                 echo "getWakatime('$v[username]','$v[url_wakatime]');\n";
             }
         }  
     ?>
+
+	setTimeout(function(){
+		detik.sort();
+		detik.reverse();
+		datalist();
+	}, 5000);
 });
 
 function secondsToHms(d) {
@@ -98,22 +97,36 @@ function getWakatime(username,url) {
 		url: url,
 		dataType: 'jsonp',
 		success: function(response) {
-		var detik = 0;
+		var detiks = 0;
 		var rata2detik;
 		var totaldata = response.data.length;
 			for( key in response.data ){
-			detik = detik+response.data[key].grand_total.total_seconds;
+			detiks = detiks+response.data[key].grand_total.total_seconds;
 			}
-			rata2detik = detik/totaldata;
-			var jam = secondsToHms(rata2detik);
-			$('#'+username).html(jam);
-
-            var rank = $('#'+username).html(detik);
-            
-            console.log(rank.sort(function(a, b){return a-b}));
+			wakatime.push({username:username, detik:detiks});
+			detik.push(detiks);
         },
     });
 }
+
+function datalist() {
+	var row = $('#list_data').html();
+	var rowlist = '';
+	for (let i = 0; i < detik.length; i++) {
+		for (const key in wakatime) {
+			if (wakatime[key].detik == detik[i]) {
+				var apaya = $(row);
+				apaya.find('td:nth-child(1)').text(parseInt(i)+parseInt(1));
+				apaya.find('td:nth-child(2)').text(wakatime[key].username);
+				apaya.find('td:nth-child(3)').text(wakatime[key].detik)
+				rowlist += '<tr>'+apaya.html()+'</tr>';
+			}
+		}
+	}
+	$('#list_data').html(rowlist);
+	// console.log(rowlist);
+}
+
 </script>
 
 </body>
